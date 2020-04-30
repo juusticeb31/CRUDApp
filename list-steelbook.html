@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <title>Steelbooks</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.4.1/css/all.css" integrity="sha384-5sAR7xN1Nv6T6+dT2mhtzEpVJvfS3NScPQTrOxhwjIuvcA67KV2R5Jz6kr4abQsz" crossorigin="anonymous">
+   <!-- <link rel="stylesheet" href="../static/css/steelbook_styles.css" th:href="@{steelbook_styles.css}">-->
+    <style>
+        
+        h2{text-align: center;}
+		#navigation{float:right;
+		}
+        img{
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  width: 50%;}
+.header {
+  padding: 60px;
+  text-align: center;
+  background: #1abc9c;
+  color: white;
+  font-size: 30px;
+}
+#list{
+	display: block;
+  margin-left: auto;
+  margin-right: auto;
+ 
+}
+        </style>
+</head>
+
+<body>	
+	<div class="header">
+			
+				  	<div id="navigation">
+					 <a href="/" id="nav" class="btn btn-primary"><i
+                        class="fas fa-home ml-2"> Home</i>
+                        </a>
+                        <a href="/showForm" id="nav" class="btn btn-primary"><i
+                        class="fas fa-plus ml-2">Add Steelbook</i>
+                        </a>  
+                         <a href="/steelbooks" class="btn btn-primary"><i
+                        class="fas fa-film ml-2">View Steelbooks</i>
+                        </a>
+						</div>
+</div>
+  <div class="container my-2">
+	
+        <div class="card">
+
+            <div class="card-body">
+			
+
+                <div th:switch="${steelbooks}" class="container my-5">
+                    <div id="list" class="col-md-10">
+                    <h2>Steelbooks Database</h2>   
+                       <div th:case="*">
+                           <table class="table table-striped table-responsive-md">
+                                <thead>
+                                    <tr>
+                                        <th>Title</th>
+                                        <th>Genre</th>
+										<th>Price</th>
+                                        <th>Edit</th>
+										<th>Delete</th>
+										<th>Details</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr th:each="steelbook : ${steelbooks}">
+                                        <td th:text="${steelbook.title}"></td>
+                                        <td th:text="${steelbook.genre}"></td>
+							
+										<td th:utext="${#numbers.formatDecimal(steelbook.price,2,2,'POINT')}">         
+										</td>
+				
+									  <!--<td><a th:href="@{/steelbooks/edit/{id}(id=${steelbook.id})}" class="btn btn-primary"><i class="fas fa-user-edit ml-2"></i></a></td>-->
+									  <td><a th:href="@{/edit/{id}(id=${steelbook.id})}" class="btn btn-primary"><i class="fas fa-user-edit ml-2"></i></a></td>  
+										<td><a th:href="@{/delete/{id}(id=${steelbook.id})}" class="btn btn-primary"><i class="fas fa-user-times ml-2"></i></a></td>
+										
+										<td><a th:href="@{/details/{id}(id=${steelbook.id})}" class="btn btn-primary"><i class="fas fa-info-circle ml-2"></i></a></td>
+
+                                    </tr>
+                                </tbody>
+                            </table>
+
+                            <!-- customers pagination -->
+<nav aria-label="Pagination" th:if="${steelbooks.totalPages gt 0}">
+    <ul class="pagination justify-content-center font-weight-bold">
+        <li class="page-item" th:classappend="${steelbooks.number eq 0} ? 'disabled'">
+            <a class="page-link"
+                th:href="@{/?page={id}(id=${steelbooks.number lt 2 ? 1 : steelbooks.number})}"
+                aria-label="Previous" title="Previous Page" data-toggle="tooltip">
+                <span aria-hidden="true">&laquo;</span>
+            </a>
+        </li>
+        <li class="page-item" th:classappend="${i eq steelbooks.number + 1} ? 'active'"
+                th:each="i : ${#numbers.sequence( 1, steelbooks.totalPages, 1)}">
+                <a class="page-link" th:href="@{/steelbooks?page={id}(id=${i})}" th:text="${i}"
+                    th:title="${'Page '+ i}" data-toggle="tooltip">
+                </a>
+        </li>
+        <li class="page-item" th:classappend="${steelbooks.number + 1 eq steelbooks.totalPages} ? 'disabled'">
+                <a class="page-link"
+                    th:href="@{/?page={id}(id=${steelbooks.number + 2})}"
+                    aria-label="Next" title="Next Page" data-toggle="tooltip">
+                <span aria-hidden="true">&raquo;</span>
+                </a>
+        </li>
+    </ul>
+</nav>
+
+            
+                       </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+  </div> 
+</body>
+
+</html>
